@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Add New Account</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-3">
+                            {{ form.account_code.label(class="form-label") }}
+                            {{ form.account_code(class="form-control", placeholder="e.g., 1000") }}
+                            {% for error in form.account_code.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                            <small class="form-text text-muted">Unique code for this account</small>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.account_name.label(class="form-label") }}
+                            {{ form.account_name(class="form-control", placeholder="e.g., Cash - Operating Account") }}
+                            {% for error in form.account_name.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.account_type_id.label(class="form-label") }}
+                            {{ form.account_type_id(class="form-select") }}
+                            {% for error in form.account_type_id.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                            <small class="form-text text-muted">Select the type of account</small>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.opening_balance.label(class="form-label") }}
+                            {{ form.opening_balance(class="form-control", placeholder="0.00") }}
+                            {% for error in form.opening_balance.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                            <small class="form-text text-muted">Initial balance for this account</small>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.description.label(class="form-label") }}
+                            {{ form.description(class="form-control", rows=3, placeholder="Optional description...") }}
+                            {% for error in form.description.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('chart_of_accounts') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Cancel
+                            </a>
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

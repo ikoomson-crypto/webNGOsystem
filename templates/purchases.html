@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Purchases</h2>
+        <a href="{{ url_for('add_purchase') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Purchase
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Purchase #</th>
+                            <th>Supplier</th>
+                            <th>Invoice #</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for purchase in purchases %}
+                        <tr>
+                            <td>{{ purchase.purchase_number }}</td>
+                            <td>{{ purchase.supplier.name if purchase.supplier else 'N/A' }}</td>
+                            <td>{{ purchase.invoice_number or 'N/A' }}</td>
+                            <td>${{ "%.2f"|format(purchase.amount) }}</td>
+                            <td>{{ purchase.date.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ purchase.due_date.strftime('%Y-%m-%d') if purchase.due_date else 'N/A' }}</td>
+                            <td>
+                                <span class="badge bg-{{ 'success' if purchase.status == 'Paid' else 'warning' if purchase.status == 'Pending' else 'danger' }}">
+                                    {{ purchase.status }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center">No purchases found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

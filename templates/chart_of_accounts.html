@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Chart of Accounts</h2>
+        <div>
+            <a href="{{ url_for('add_account_type') }}" class="btn btn-info me-2">
+                <i class="fas fa-tag"></i> Add Account Type
+            </a>
+            <a href="{{ url_for('add_account') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Account
+            </a>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Account Types Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for type in account_types %}
+                        <div class="col-md-2 mb-2">
+                            <div class="alert alert-info mb-0">
+                                <strong>{{ type.name }}</strong><br>
+                                <small>{{ type.normal_balance }} balance</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Account Code</th>
+                            <th>Account Name</th>
+                            <th>Account Type</th>
+                            <th class="text-end">Balance</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for account in accounts %}
+                        <tr>
+                            <td>{{ account.account_code }}</td>
+                            <td>{{ account.account_name }}</td>
+                            <td>{{ account.account_type.name if account.account_type else 'N/A' }}</td>
+                            <td class="text-end">
+                                {% if account.balance > 0 %}
+                                    <span class="text-success">${{ "%.2f"|format(account.balance) }}</span>
+                                {% elif account.balance < 0 %}
+                                    <span class="text-danger">(${{ "%.2f"|format(account.balance|abs) }})</span>
+                                {% else %}
+                                    $0.00
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-{{ 'success' if account.is_active else 'danger' }}">
+                                    {{ 'Active' if account.is_active else 'Inactive' }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                No accounts found. <a href="{{ url_for('add_account') }}">Add your first account</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
